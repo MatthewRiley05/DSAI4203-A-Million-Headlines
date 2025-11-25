@@ -12,6 +12,7 @@ print("CLUSTERING EVALUATION")
 print("=" * 80)
 
 # Silhouette score (sampled)
+np.random.seed(42)
 sample_idx = np.random.choice(len(features), min(10000, len(features)), replace=False)
 sil = silhouette_score(features[sample_idx], labels[sample_idx])
 print(f"\nSilhouette Score (sample of {len(sample_idx)}): {sil:.4f}")
