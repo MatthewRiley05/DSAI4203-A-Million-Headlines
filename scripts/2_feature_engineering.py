@@ -18,7 +18,7 @@ vectorizer = TfidfVectorizer(
     max_df=0.5,
     ngram_range=(1, 3),
     stop_words="english",
-    token_pattern=r"(?u)\b[a-zA-Z]{3,}\b",
+    token_pattern=r"(?u)\b[a-zA-Z]{2,}\b",
 )
 tfidf_matrix = vectorizer.fit_transform(df[text_col])
 
