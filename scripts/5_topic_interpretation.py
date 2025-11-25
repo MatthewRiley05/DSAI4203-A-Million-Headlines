@@ -25,9 +25,10 @@ for i in range(kmeans.n_clusters):
     print(f"\nCluster {i}:")
     print(f"Top terms: {', '.join(top_terms)}")
     print("\nSample headlines:")
-    for j, h in enumerate(df[df["cluster"] == i][df.columns[1]].head(5), 1):
+    cluster_df = df[df["cluster"] == i]
+    for j, h in enumerate(cluster_df[df.columns[1]].head(5), 1):
         print(f"  {j}. {h}")
-    print(f"\nCluster size: {(labels == i).sum()} headlines")
+    print(f"\nCluster size: {len(cluster_df)} headlines")
 
 with open("outputs/cluster_topics.pkl", "wb") as f:
     pickle.dump(topics, f)
