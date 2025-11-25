@@ -1,29 +1,30 @@
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 import pickle
+import re
 
-# Load preprocessed data
 df = pd.read_csv("outputs/abcnews-date-text-preprocessed.csv")
+text_col = df.columns[1]
 
-# Get the text column (assuming second column is the headline text)
-text_column = df.columns[1]
-
-# Initialize TF-IDF Vectorizer
-tfidf_vectorizer = TfidfVectorizer(
-    max_features=5000,  # Limit to top 5000 features
-    min_df=5,  # Ignore terms that appear in fewer than 5 documents
-    max_df=0.8,  # Ignore terms that appear in more than 80% of documents
-    ngram_range=(1, 2),  # Use unigrams and bigrams
-    stop_words="english",
+# Clean text
+df[text_col] = df[text_col].apply(
+    lambda x: re.sub(r"\s+", " ", re.sub(r"\d+", "", x.lower())).strip()
 )
 
-# Fit and transform the text data
-tfidf_matrix = tfidf_vectorizer.fit_transform(df[text_column])
+# TF-IDF vectorization
+vectorizer = TfidfVectorizer(
+    max_features=10000,
+    min_df=10,
+    max_df=0.5,
+    ngram_range=(1, 3),
+    stop_words="english",
+    token_pattern=r"(?u)\b[a-zA-Z]{2,}\b",
+)
+tfidf_matrix = vectorizer.fit_transform(df[text_col])
 
-# Save the vectorizer for later use
+# Save
 with open("outputs/tfidf_vectorizer.pkl", "wb") as f:
-    pickle.dump(tfidf_vectorizer, f)
-
-# Save the TF-IDF matrix
+    pickle.dump(vectorizer, f)
 with open("outputs/tfidf_matrix.pkl", "wb") as f:
     pickle.dump(tfidf_matrix, f)
+print("Feature engineering complete!")
