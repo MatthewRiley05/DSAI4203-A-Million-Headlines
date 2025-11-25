@@ -66,7 +66,9 @@ print("=" * 80)
 
 # Silhouette score (sampled)
 np.random.seed(42)
-sample_idx = np.random.choice(len(svd_features), min(10000, len(svd_features)), replace=False)
+sample_idx = np.random.choice(
+    len(svd_features), min(10000, len(svd_features)), replace=False
+)
 sil = silhouette_score(svd_features[sample_idx], clusters[sample_idx])
 print(f"\nSilhouette Score (sample of {len(sample_idx)}): {sil:.4f}")
 print("  Range: [-1, 1] | Higher is better | >0.5 is good")
