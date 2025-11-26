@@ -4,8 +4,10 @@ import numpy as np
 from sklearn.cluster import MiniBatchKMeans
 from sklearn.metrics import silhouette_score, calinski_harabasz_score
 
+
 def print_section(title):
     print(f"\n{'=' * 80}\n{title}\n{'=' * 80}")
+
 
 # STEP 1: CLUSTERING
 print_section("CLUSTERING")
@@ -31,7 +33,9 @@ feature_names = vectorizer.get_feature_names_out()
 
 topics = {}
 for i in range(kmeans.n_clusters):
-    top_terms = [feature_names[idx] for idx in kmeans.cluster_centers_[i].argsort()[-15:][::-1]]
+    top_terms = [
+        feature_names[idx] for idx in kmeans.cluster_centers_[i].argsort()[-15:][::-1]
+    ]
     topics[i] = top_terms
     cluster_df = df[df["cluster"] == i]
     print(f"\nCluster {i}:\nTop terms: {', '.join(top_terms)}\n\nSample headlines:")
@@ -46,7 +50,9 @@ print_section("Topic interpretation complete!")
 # STEP 3: CLUSTERING EVALUATION
 print_section("CLUSTERING EVALUATION")
 np.random.seed(42)
-sample_idx = np.random.choice(len(svd_features), min(10000, len(svd_features)), replace=False)
+sample_idx = np.random.choice(
+    len(svd_features), min(10000, len(svd_features)), replace=False
+)
 sil = silhouette_score(svd_features[sample_idx], clusters[sample_idx])
 ch = calinski_harabasz_score(svd_features, clusters)
 
@@ -60,8 +66,11 @@ unique, counts = np.unique(clusters, return_counts=True)
 for cid, cnt in zip(unique, counts):
     print(f"Cluster {cid}: {cnt:,} headlines ({cnt / len(clusters) * 100:.2f}%)")
 
-metrics = {"silhouette_score": sil, "calinski_harabasz_score": ch, 
-           "cluster_sizes": dict(zip(unique.tolist(), counts.tolist()))}
+metrics = {
+    "silhouette_score": sil,
+    "calinski_harabasz_score": ch,
+    "cluster_sizes": dict(zip(unique.tolist(), counts.tolist())),
+}
 with open("outputs/evaluation_metrics.pkl", "wb") as f:
     pickle.dump(metrics, f)
 

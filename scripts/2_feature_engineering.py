@@ -10,8 +10,12 @@ df[text_col] = df[text_col].apply(
 )
 
 vectorizer = TfidfVectorizer(
-    max_features=10000, min_df=10, max_df=0.5, ngram_range=(1, 3),
-    stop_words="english", token_pattern=r"(?u)\b[a-zA-Z]{2,}\b"
+    max_features=10000,
+    min_df=10,
+    max_df=0.5,
+    ngram_range=(1, 3),
+    stop_words="english",
+    token_pattern=r"(?u)\b[a-zA-Z]{2,}\b",
 )
 tfidf_matrix = vectorizer.fit_transform(df[text_col])
 
