@@ -79,7 +79,8 @@ print("LDA modeling complete!")
 
 # STEP 3: TOPIC INTERPRETATION
 print_section("TOPIC INTERPRETATION")
-df["topic"], df["topic_weight"] = dominant_topics, doc_topic_dist.max(axis=1)
+df["topic"] = dominant_topics
+df["topic_weight"] = doc_topic_dist.max(axis=1)
 feature_names = count_vectorizer.get_feature_names_out()
 topics, n_top_words = {}, 20
 
