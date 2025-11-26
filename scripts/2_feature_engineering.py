@@ -5,13 +5,10 @@ import re
 
 df = pd.read_csv("outputs/abcnews-date-text-preprocessed.csv")
 text_col = df.columns[1]
-
-# Clean text
 df[text_col] = df[text_col].apply(
     lambda x: re.sub(r"\s+", " ", re.sub(r"\d+", "", x.lower())).strip()
 )
 
-# TF-IDF vectorization
 vectorizer = TfidfVectorizer(
     max_features=10000,
     min_df=10,
@@ -22,9 +19,7 @@ vectorizer = TfidfVectorizer(
 )
 tfidf_matrix = vectorizer.fit_transform(df[text_col])
 
-# Save
-with open("outputs/tfidf_vectorizer.pkl", "wb") as f:
-    pickle.dump(vectorizer, f)
-with open("outputs/tfidf_matrix.pkl", "wb") as f:
-    pickle.dump(tfidf_matrix, f)
+for name, obj in [("tfidf_vectorizer", vectorizer), ("tfidf_matrix", tfidf_matrix)]:
+    with open(f"outputs/{name}.pkl", "wb") as f:
+        pickle.dump(obj, f)
 print("Feature engineering complete!")

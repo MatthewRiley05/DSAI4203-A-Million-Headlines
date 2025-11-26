@@ -7,8 +7,7 @@ with open("outputs/tfidf_matrix.pkl", "rb") as f:
 svd = TruncatedSVD(n_components=200, random_state=42)
 svd_matrix = svd.fit_transform(tfidf_matrix)
 
-with open("outputs/svd_model.pkl", "wb") as f:
-    pickle.dump(svd, f)
-with open("outputs/svd_features.pkl", "wb") as f:
-    pickle.dump(svd_matrix, f)
+for name, obj in [("svd_model", svd), ("svd_features", svd_matrix)]:
+    with open(f"outputs/{name}.pkl", "wb") as f:
+        pickle.dump(obj, f)
 print("Dimensionality reduction complete!")
