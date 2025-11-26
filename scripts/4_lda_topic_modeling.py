@@ -4,7 +4,11 @@ import numpy as np
 from sklearn.decomposition import LatentDirichletAllocation
 from sklearn.feature_extraction.text import CountVectorizer, ENGLISH_STOP_WORDS
 
-from scripts.utils import print_section
+
+def print_section(title):
+    print("\n" + "=" * 80)
+    print(title)
+    print("=" * 80 + "\n")
 # STEP 1: PREPARE DATA FOR LDA
 print_section("PREPARING DATA FOR LDA")
 df = pd.read_csv("outputs/abcnews-date-text-preprocessed.csv")
