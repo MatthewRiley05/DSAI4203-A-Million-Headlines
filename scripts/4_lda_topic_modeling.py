@@ -110,7 +110,7 @@ perplexity = lda.perplexity(tf_matrix)
 log_likelihood = lda.score(tf_matrix)
 
 print(f"\nPerplexity: {perplexity:.2f}")
-print("  Lower is better | Measures how well model predicts held-out data")
+print("  Lower is better | Measures model fit on training data (not held-out data)")
 print(f"\nLog-likelihood: {log_likelihood:.2f}")
 print("  Higher is better | Measures model fit")
 
