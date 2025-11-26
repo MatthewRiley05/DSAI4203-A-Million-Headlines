@@ -34,7 +34,7 @@ count_vectorizer = CountVectorizer(
     max_features=3000,
     max_df=0.90,
     min_df=15,
-    stop_words=list(set(list(ENGLISH_STOP_WORDS) + custom_stop_words)),
+    stop_words=list(ENGLISH_STOP_WORDS.union(custom_stop_words)),
     ngram_range=(1, 2),
     token_pattern=r"\b[a-z]{3,}\b",
 )
