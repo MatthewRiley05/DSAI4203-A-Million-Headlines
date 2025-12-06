@@ -1,22 +1,38 @@
 import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer
+from nltk.stem import SnowballStemmer
+from sklearn.feature_extraction.text import TfidfVectorizer, ENGLISH_STOP_WORDS
 import pickle
 import re
 
 df = pd.read_csv("outputs/abcnews-date-text-preprocessed.csv")
 text_col = df.columns[1]
-df[text_col] = df[text_col].apply(
-    lambda x: re.sub(r"\s+", " ", re.sub(r"\d+", "", x.lower())).strip()
-)
+
+stemmer = SnowballStemmer("english")
+stop_words = ENGLISH_STOP_WORDS
+
+def stem_analyzer(text):
+    text = text.lower()
+    text = re.sub(r"\d+", " ", text)            # remove digits
+    text = re.sub(r"[^a-z\s]", " ", text)       # remove punctuation and symbols
+    text = re.sub(r"\s+", " ", text)          # normalize whitespace
+    tokens = text.split()
+    tokens = [t for t in text.split() if t not in stop_words]
+    tokens = [stemmer.stem(t) for t in tokens]
+
+    # generate 2-grams and 3-grams
+    bigrams = [tokens[i] + " " + tokens[i+1] for i in range(len(tokens)-1)]
+    trigrams = [tokens[i] + " " + tokens[i+1] + " " + tokens[i+2] for i in range(len(tokens) - 2)]
+    
+    return tokens + bigrams + trigrams
 
 vectorizer = TfidfVectorizer(
     max_features=10000,
     min_df=10,
     max_df=0.5,
-    ngram_range=(1, 3),
-    stop_words="english",
-    token_pattern=r"(?u)\b[a-zA-Z]{2,}\b",
+    analyzer=stem_analyzer,
+    token_pattern= None
 )
+
 tfidf_matrix = vectorizer.fit_transform(df[text_col])
 
 for name, obj in [("tfidf_vectorizer", vectorizer), ("tfidf_matrix", tfidf_matrix)]:
