@@ -3,7 +3,19 @@ import pandas as pd
 import numpy as np
 from sklearn.decomposition import LatentDirichletAllocation
 from sklearn.feature_extraction.text import CountVectorizer, ENGLISH_STOP_WORDS
+import logging
+import builtins
 
+# Logging allows to print everything to a log file
+logging.basicConfig(
+    filename="outputs/logs/lda.log",
+    level=logging.INFO,
+    format="%(message)s",
+    filemode="w"
+)
+
+logger= logging.getLogger()
+builtins.print = logger.info
 
 def print_section(title):
     print("\n" + "=" * 80)
@@ -41,7 +53,7 @@ count_vectorizer = CountVectorizer(
 tf_matrix = count_vectorizer.fit_transform(df[df.columns[1]])
 
 for name, obj in [("count_vectorizer", count_vectorizer), ("tf_matrix", tf_matrix)]:
-    with open(f"outputs/{name}.pkl", "wb") as f:
+    with open(f"outputs/models/{name}.pkl", "wb") as f:
         pickle.dump(obj, f)
 print(f"Term-frequency matrix shape: {tf_matrix.shape}\nData preparation complete!")
 
@@ -73,7 +85,7 @@ for name, obj in [
     ("doc_topic_distribution", doc_topic_dist),
     ("lda_topic_labels", dominant_topics),
 ]:
-    with open(f"outputs/{name}.pkl", "wb") as f:
+    with open(f"outputs/models/{name}.pkl", "wb") as f:
         pickle.dump(obj, f)
 print("LDA modeling complete!")
 
@@ -101,7 +113,7 @@ for topic_idx, topic in enumerate(lda.components_):
         f"\nTopic size: {len(topic_df)} headlines ({len(topic_df) / len(df) * 100:.2f}%)"
     )
 
-with open("outputs/lda_topics.pkl", "wb") as f:
+with open("outputs/models/lda_topics.pkl", "wb") as f:
     pickle.dump(topics, f)
 print_section("Topic interpretation complete!")
 
@@ -151,7 +163,7 @@ metrics = {
     "diversity_score": diversity_score,
     "n_unique_top_words": len(unique_words),
 }
-with open("outputs/lda_evaluation_metrics.pkl", "wb") as f:
+with open("outputs/models/lda_evaluation_metrics.pkl", "wb") as f:
     pickle.dump(metrics, f)
 
 df.to_csv("outputs/abcnews-with-lda-topics.csv", index=False)
