@@ -19,6 +19,9 @@ def stem_analyzer(text):
     tokens = [t for t in text.split() if t not in stop_words]
     tokens = [stemmer.stem(t) for t in tokens]
 
+    # remove short tokens consisting of less than 3 characters
+    tokens = [t for t in tokens if len(t) >= 3]
+
     # generate 2-grams and 3-grams
     bigrams = [tokens[i] + " " + tokens[i+1] for i in range(len(tokens)-1)]
     trigrams = [tokens[i] + " " + tokens[i+1] + " " + tokens[i+2] for i in range(len(tokens) - 2)]
