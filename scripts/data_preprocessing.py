@@ -11,7 +11,7 @@ def stem_analyzer(text):
     text = re.sub(r"[^a-z\s]", " ", text)       # remove punctuation and symbols
     text = re.sub(r"\s+", " ", text)          # normalize whitespace
     tokens = text.split()
-    tokens = [t for t in text.split() if t not in stop_words]
+    tokens = [t for t in tokens if t not in stop_words]
     tokens = [stemmer.stem(t) for t in tokens]
 
     # remove short tokens consisting of less than 3 characters
