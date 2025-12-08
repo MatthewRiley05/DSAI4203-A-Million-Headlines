@@ -3,7 +3,9 @@ import pandas as pd
 
 # ===============================
 # Fake or Real Dataset (~6.3k, 50/50)
+# https://www.kaggle.com/datasets/hassanamin/textdb3?resource=download
 # ===============================
+
 df_fr = pd.read_csv("dataset/fake_or_real_news.csv")
 df_fr = df_fr[["title", "label"]].rename(columns={"label": "real"})
 
@@ -16,6 +18,7 @@ df_fr = df_fr.drop_duplicates()
 
 # ===============================
 # FakeNewNet Dataset (~23k, 25/75)
+# https://www.kaggle.com/datasets/algord/fake-news
 # ===============================
 df_fnn = pd.read_csv("dataset/FakeNewsNet.csv")
 
@@ -32,6 +35,7 @@ df_fnn = df_fnn.drop_duplicates()
 
 # ===============================
 # WELFake Dataset (~72k, almost 50/50 distribution)
+# https://www.kaggle.com/datasets/saurabhshahane/fake-news-classification
 # ===============================
 df_wel = pd.read_csv("dataset/WELFake_Dataset.csv")
 df_wel = df_wel[["title", "label"]].rename(columns={"label": "real"})
