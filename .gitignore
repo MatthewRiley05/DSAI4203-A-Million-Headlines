@@ -208,3 +208,6 @@ __marimo__/
 
 # Project outputs
 outputs/
+
+#Dataset
+dataset/

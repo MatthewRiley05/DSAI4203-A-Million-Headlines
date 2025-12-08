@@ -1,0 +1,97 @@
+svd_results.log was done in jupyter notebook, and it shows that more variance is saved with more dimensionality
+but it doesn't mean better, might cause overfitting
+
+clustering.log worked with svd (200 dimensions) - and we have big clusters, in our case it made:
+best_k = 50
+2 cluster with share over 20% and maximum was 31%;
+
+I assume that in 200 dimensions some topics were merged so increasing dimensionality might improve situation: 
+So for just expirementing I tried with 300 dimensions:
+best_k = 45
+It performed worth: decreasing silhouette by 0.02
+                    increasing max cluster share by 2%
+
+___________________________________________________________________________________________________
+after other consideration I came to conlusion to save 3-grams for feature engineering.
+
+___________________________________________________________________________________________________
+Running AE on whole tfidf is too computationally costly, so instead I ran on SVD
+SVD(200) -> (128, RelU) -> (64, RelU) -> Z (linear) -> symmetrically -> output (200, linear)
+
+Autoencoder- SVD(Nx200) -> AE|Z (Nx10):
+epoch=10 -> k=50; silhouette=0.2352; max_share=0.188 (only 1 big cluster)
+epoch=20 -> k=50; silhouette=0.2365; max_share=0.218 (only 1 big cluster)
+epoch=30 -> k=40; silhouette=0.2326; max_share=0.255 (only 1 big cluster)
+
+Autoencoder- SVD(Nx200) -> AE|Z (Nx32):
+epoch=10 -> k=50; silhouette=0.1851; max_share=0.300 (1: 0.3; 1: 0.1; total 2)
+epoch=20 -> k=50; silhouette=0.2804; max_share=0.372 (only 1 big cluster)
+epoch=30 -> k=40; silhouette=0.2247; max_share=0.345 (only 1 big cluster)
+
+Autoencoder- SVD(Nx200) -> AE|Z (Nx50):
+epoch=10 -> k=50; silhouette=0.2197; max_share=0.342 (only 1 big cluster)
+epoch=20 -> k=50; silhouette=0.2487; max_share=0.366 (only 1 big cluster)
+epoch=30 -> k=50; silhouette=0.2071; max_share=0.323 (only 1 big cluster)
+
+Insights: 
+AE generally has better clustering results than SVD, both in terms of silhouette and max_share scores
+        (silhouette rose significantly, max_share reduced significantly with Nx10, in all other cases
+        there were only 1 big cluster, while SVD had at least 2)
+    Less dimensions, better results
+    vertraining on more epochs reduces performance
+    Autoencoder embeddings significantly outperform SVD embeddings.
+    Optimal latent dimension is 32.
+    Optimal number of epochs is around 20.
+    Larger latent sizes (50+) introduce noise and reduce structure.
+    Very small latent sizes (10) produce balanced clusters but slightly worse silhouette.
+    Autoencoders reduce cluster imbalance dramatically (no oversized 50% clusters).
+    AE representations are more suitable for KMeans and topic interpretation.
+
+I would prefer taking Z=10, epochs=10 because it's balanced in terms of silhouette and max_share,
+    additionally all other clusters are shared almost equally, and it's silhouette score is consistent.
+
+
+--------------------------------------------------------------------------------------------------------------------
+Semi-supervised labeling from fake-real news datasets:
+    dataset/fake_or_real_news.csv:
+        (6256, exact 50/50; for this i just want to title and real columns)
+    dataset/FakeNewsNet.csv:
+        (21724k, not even; 
+        I want more data cleaning: remove records with zero tweets, even if they are real or not, maybe if no links)
+    dataset/WELFake_Dataset.csv:
+        (72k, almost 50/50 distribution: for this i just want to title and real columns)
+
+Feature engineering and so on.
+
+For 8.3 Iterative Self-Training, Logistic Regression is the correct choice because:
+
+It produces clean probabilities ✔
+It handles sparse high-dimensional text ✔
+It is fast to retrain in loops ✔
+It is stable with noisy pseudo-labels ✔
+
+Later, in 8.4 Classifications:
+Because validation must always come from TRUE labels, not pseudo-labels.
+
+If you used 20% of 1.2 million (pseudo-labeled + real), then:
+    The model would be evaluated on its own predictions
+    That leads to false accuracy
+    And your evaluation becomes meaningless
+
+So proper semi-supervised practice is:
+🔹 Train on:
+original_train (80% true labels) + all pseudo-labels
+🔹 Validate on:
+original_val (20% true labels only)
+
+This ensures:
+    validation is clean
+    evaluation uses only ground-truth labels
+    we don't leak pseudo-label noise into evaluation
+
+Original labeled = 82,417
+Validation (20%) = 16,483 ≈ 16,484
+Training original part = 82,417 − 16,484 = 65,933
+
+Pseudo-labeled added:
+1,209,702 − 82,417 = 1,127,285
