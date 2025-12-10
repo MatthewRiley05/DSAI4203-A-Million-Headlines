@@ -1,0 +1,10 @@
+Need to download these datasets before running Classification part
+
+FakeNewsNet.csv
+  https://www.kaggle.com/datasets/algord/fake-news
+
+fake_or_real_news.csv
+  https://www.kaggle.com/datasets/hassanamin/textdb3?resource=download
+
+WELFake_Dataset.csv
+  https://www.kaggle.com/datasets/saurabhshahane/fake-news-classification
