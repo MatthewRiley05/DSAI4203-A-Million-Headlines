@@ -17,12 +17,12 @@ This project performs unsupervised topic discovery and supervised (semi-supervis
 
 ✅ **Tested and verified** - K-Means with auto k-selection outperformed ensemble methods  
 ✅ **10,000-15,000 TF-IDF features** with custom news stopwords  
-✅ **200 SVD components** preserving maximum variance
-✅ **10 Z latent size (AE)** reducing dimensionality burden
-✅ **20 epochs** prevent from overtraining
-✅ **Threshold for Self-training** including only good records
-✅ **Automatic optimal k selection** via Davies-Bouldin scoring  
-✅ **L2 normalization** for improved cluster separation
+✅ **200 SVD components** preserving maximum variance                                                                                     
+✅ **10 Z latent size (AE)** reducing dimensionality burden                                                         
+✅ **20 epochs** prevent from overtraining                                                                                      
+✅ **Threshold for Self-training** including only good records                                                                                      
+✅ **Automatic optimal k selection** via Davies-Bouldin scoring                                                                                        
+✅ **L2 normalization** for improved cluster separation                                                                                     
 
 ## Quick Start
 
