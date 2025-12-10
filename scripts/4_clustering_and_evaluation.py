@@ -115,6 +115,9 @@ for i in range(kmeans.n_clusters):
     top_terms = [feature_names[idx] for idx in top_ind]
 
     topics[i] = top_terms
+
+# Show all clusters
+for i in range(kmeans.n_clusters):
     cluster_df = df[df["cluster"] == i]
     
     print(f"""\nCluster {i}:
@@ -127,7 +130,8 @@ for i in range(kmeans.n_clusters):
 
 with open("outputs/models/cluster_topics.pkl", "wb") as f:
     pickle.dump(topics, f)
-print_section("Topic interpretation complete!")
+
+print(f"\n✓ Identified {kmeans.n_clusters} topics")
 
 # STEP 4: CLUSTERING EVALUATION
 print_section("CLUSTERING EVALUATION")
@@ -141,16 +145,13 @@ print("  Higher is better | No fixed range")
 
 print(f"\n{'-' * 80}\nCluster Size Distribution:\n{'-' * 80}")
 unique, counts = np.unique(clusters, return_counts=True)
-for cid, cnt in zip(unique, counts):
-    print(f"Cluster {cid}: {cnt:,} headlines ({cnt / len(clusters) * 100:.2f}%)")
-
 metrics = {
     "best_k": best_k,
     "silhouette_score": sil,
     "calinski_harabasz_score": ch,
+    "davies_bouldin_score": db,
+    "n_clusters": best_k,
     "cluster_sizes": dict(zip(unique.tolist(), counts.tolist())),
 }
 with open("outputs/models/evaluation_metrics.pkl", "wb") as f:
     pickle.dump(metrics, f)
-
-print_section("Clustering evaluation complete!")
