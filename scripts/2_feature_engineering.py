@@ -2,8 +2,11 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from data_preprocessing import stem_analyzer
 import pickle
+import os
 
 MIN_HEADLINE_LENGTH = 20
+
+os.makedirs("outputs/models", exist_ok=True)
 
 df = pd.read_csv("outputs/abcnews-date-text-preprocessed.csv")
 text_col = df.columns[1]
@@ -13,7 +16,7 @@ vectorizer = TfidfVectorizer(
     min_df=10,
     max_df=0.5,
     analyzer=stem_analyzer,
-    token_pattern= None
+    token_pattern=None,
 )
 
 tfidf_matrix = vectorizer.fit_transform(df[text_col])

@@ -5,22 +5,38 @@ from sklearn.decomposition import LatentDirichletAllocation
 from sklearn.feature_extraction.text import CountVectorizer, ENGLISH_STOP_WORDS
 import logging
 import builtins
+import os
+import sys
+
+os.makedirs("outputs/logs", exist_ok=True)
 
 # Logging allows to print everything to a log file
 logging.basicConfig(
     filename="outputs/logs/lda.log",
     level=logging.INFO,
     format="%(message)s",
-    filemode="w"
+    filemode="w",
 )
 
-logger= logging.getLogger()
-builtins.print = logger.info
+logger = logging.getLogger()
+
+
+# Custom print that logs AND prints to console
+def dual_print(msg):
+    logger.info(msg)
+    sys.__stdout__.write(str(msg) + "\n")
+    sys.__stdout__.flush()
+
+
+builtins.print = dual_print
+
 
 def print_section(title):
     print("\n" + "=" * 80)
     print(title)
     print("=" * 80 + "\n")
+
+
 # STEP 1: PREPARE DATA FOR LDA
 print_section("PREPARING DATA FOR LDA")
 df = pd.read_csv("outputs/abcnews-date-text-preprocessed.csv")
