@@ -2,7 +2,7 @@ import pickle
 import pandas as pd
 import numpy as np
 from sklearn.cluster import MiniBatchKMeans
-from sklearn.metrics import silhouette_score, calinski_harabasz_score
+from sklearn.metrics import silhouette_score, calinski_harabasz_score, davies_bouldin_score
 from sklearn.preprocessing import normalize
 import logging
 import builtins
@@ -137,6 +137,7 @@ print(f"\n✓ Identified {kmeans.n_clusters} topics")
 print_section("CLUSTERING EVALUATION")
 sil = silhouette_score(X_sample, clusters[sample_idx])
 ch = calinski_harabasz_score(svd_features_norm, clusters)
+db = davies_bouldin_score(svd_features_norm, clusters)
 
 print(f"\nSilhouette Score (sample of {len(X_sample)}): {sil:.4f}")
 print("  Range: [-1, 1] | Higher is better | >0.5 is good")
