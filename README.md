@@ -30,7 +30,7 @@ python main.py
 1. **Data Cleaning** - Remove duplicates, filter short headlines
 2. **Feature Engineering** - TF-IDF vectorization with optimized parameters
 3. **Dimensionality Reduction** - SVD to 300 components
-4. **Clustering** - K-Means with automatic k-selection (35 clusters optimal)
+4. **Clustering** - LDA topic modeling (default; K-Means available as alternative)
 
 ## Results
 
