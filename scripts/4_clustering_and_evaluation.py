@@ -21,28 +21,27 @@ svd_features_norm = normalize(svd_features, norm="l2")
 n_clusters_options = [20, 25, 30, 35, 40]
 best_score = float("inf")
 best_k = 30
-
+best_kmeans = None
+clusters = None
 for k in n_clusters_options:
     kmeans_temp = MiniBatchKMeans(
-        n_clusters=k, random_state=42, batch_size=2000, n_init=10
+        n_clusters=k, random_state=42, batch_size=2000, n_init=10, max_iter=300, init="k-means++"
     )
     labels_temp = kmeans_temp.fit_predict(svd_features_norm)
     db_score = davies_bouldin_score(svd_features_norm, labels_temp)
     if db_score < best_score:
         best_score = db_score
         best_k = k
+        best_kmeans = kmeans_temp
+        clusters = labels_temp
 
-# Final clustering with optimal parameters
-kmeans = MiniBatchKMeans(
-    n_clusters=best_k,
-    random_state=42,
-    batch_size=2000,
-    n_init=10,
-    max_iter=300,
-    init="k-means++",
-)
-clusters = kmeans.fit_predict(svd_features_norm)
+# Use the best model and labels found during optimization
+kmeans = best_kmeans
 
+# clusters already set to the best labels
+
+
+# clusters = kmeans.fit_predict(svd_features_norm)  # Removed redundant re-fit
 for name, obj in [("kmeans_model", kmeans), ("cluster_labels", clusters)]:
     with open(f"outputs/{name}.pkl", "wb") as f:
         pickle.dump(obj, f)
