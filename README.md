@@ -62,6 +62,7 @@ python main.py
 ```
 ├── main.py                          # Main pipeline orchestrator
 ├── abcnews-date-text.csv           # Input dataset (1.2M headlines)
+├── dataset/                        # Labeled datasets (must be donwloaded manually before runnning pipeline/OR Classifiaction part from 8_1)
 ├── scripts/
 │   ├── 1_data_cleaning.py          # Preprocessing & deduplication
 │   ├── 2_feature_engineering.py    # TF-IDF vectorization
