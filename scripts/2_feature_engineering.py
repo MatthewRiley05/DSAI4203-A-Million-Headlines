@@ -4,6 +4,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer, ENGLISH_STOP_WORDS
 import pickle
 import re
 
+MIN_HEADLINE_LENGTH = 20
+
 df = pd.read_csv("outputs/abcnews-date-text-preprocessed.csv")
 text_col = df.columns[1]
 
@@ -38,7 +40,11 @@ vectorizer = TfidfVectorizer(
 
 tfidf_matrix = vectorizer.fit_transform(df[text_col])
 
+# Save preprocessed dataframe
+df.to_csv("outputs/abcnews-cleaned.csv", index=False)
+
 for name, obj in [("tfidf_vectorizer", vectorizer), ("tfidf_matrix", tfidf_matrix)]:
     with open(f"outputs/{name}.pkl", "wb") as f:
         pickle.dump(obj, f)
-print("Feature engineering complete!")
+
+print(f"✓ Created {len(df):,} samples, {tfidf_matrix.shape[1]:,} features")
