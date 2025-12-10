@@ -3,13 +3,15 @@ from sklearn.feature_extraction.text import TfidfVectorizer, ENGLISH_STOP_WORDS
 import pickle
 import re
 
+MIN_HEADLINE_LENGTH = 20
+
 df = pd.read_csv("outputs/abcnews-date-text-preprocessed.csv")
 text_col = df.columns[1]
 
 # Enhanced preprocessing
 df[text_col] = df[text_col].astype(str)
 df = df.drop_duplicates(subset=[text_col])  # Remove duplicate headlines
-df = df[df[text_col].str.len() > 20]  # Remove very short headlines
+df = df[df[text_col].str.len() > MIN_HEADLINE_LENGTH]  # Remove very short headlines
 
 # Better text cleaning
 df[text_col] = df[text_col].apply(
