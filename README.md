@@ -65,7 +65,7 @@ python main.py
 
 ## Alternative Methods
 
-To use LDA topic modeling instead, uncomment the LDA section in `main.py`.
+To use K-Means clustering instead, uncomment the K-Means section in `main.py`.
 
 ## License
 
