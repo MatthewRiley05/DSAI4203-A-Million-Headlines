@@ -1,6 +1,5 @@
 import pickle
 from sklearn.decomposition import TruncatedSVD
-import numpy as np
 
 with open("outputs/tfidf_matrix.pkl", "rb") as f:
     tfidf_matrix = pickle.load(f)
