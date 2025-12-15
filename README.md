@@ -47,7 +47,7 @@ python main.py
 12. **Evaluation of Self-training** - Check updated labeled + pseudo-labeled and unlabeled datasets
 13. **Classification and Evaluation** - Classification model and evaluating their preformance
 
-## Results
+## Results - Clustering
 
 | Metric | Value | Interpretation |
 |--------|-------|----------------|
@@ -92,6 +92,8 @@ python main.py
 - pandas
 - scikit-learn
 - numpy
+- nltk
+- matplotlib
 
 ## Alternative Methods
 
